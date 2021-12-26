@@ -130,3 +130,7 @@ dmypy.json
 
 # Node
 node_modules/
+
+# pipenv
+Pipfile
+Pipfile.lock
