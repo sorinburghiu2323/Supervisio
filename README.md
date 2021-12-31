@@ -21,7 +21,7 @@ Then activate it with:
 
 Install python dependencies:
 ```
-pip install -r requirements-base.txt
+pip install -r requirements.txt
 ```
 
 Set app development as True when developing:
