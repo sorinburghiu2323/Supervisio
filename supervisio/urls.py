@@ -20,17 +20,6 @@ from django.shortcuts import render
 from django.conf.urls import url
 
 
-def generate_api_urls(name):
-    regex = r"^{}/".format(name)
-    to_include = include("api.{}.urls".format(name))
-    namespace = "api.{}".format(name)
-    return url(regex, to_include, name=namespace)
-
-
-api_namespaces = [
-    "users",
-]
-
 vue_urls = [
     path("", lambda request: HttpResponse(render(request, "vue_index.html"))),
 ]
@@ -40,3 +29,7 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("", include(vue_urls)),
 ]
+
+# Extra django admin tags.
+admin.site.site_header = "Supervisio Administration"
+admin.site.site_title = "Supervisio Admin Portal"

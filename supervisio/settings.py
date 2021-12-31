@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework.authtoken",
     "api",
     "api.users",
+    "api.interests",
+    "api.projects",
 ]
 
 MIDDLEWARE = [
@@ -125,6 +129,19 @@ STATIC_URL = "/static/"
 STATIC_ROOT = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/build/static")]
 
+
 # Override the default user model.
 
 AUTH_USER_MODEL = "users.User"
+
+
+# Django Rest Framework.
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+}

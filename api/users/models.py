@@ -42,9 +42,10 @@ class User(TimestampedModel, AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    interests = models.ManyToManyField("interests.Interest", blank=True)
 
     # Supervisor only field.
-    capacity = models.IntegerField(null=True, blank=True)
+    capacity = models.IntegerField(default=5)
     bio = models.TextField(null=True, blank=True)
 
     # Permissions fields.

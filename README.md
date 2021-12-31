@@ -80,3 +80,12 @@ docker run -it -p 80:8000 supervisio
 ```
 
 Since we used port `80`, access `http://localhost/` to view the project.
+
+## 🧪 Testing
+
+Tests are organized into `/tests` directory. `conftest.py` contains general helper functions used throughout all the unit tests.
+
+Run tests using:
+```
+python manage.py test
+```

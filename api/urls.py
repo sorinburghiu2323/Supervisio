@@ -12,6 +12,8 @@ def generate_api_urls(name):
 
 api_namespaces = [
     "users",
+    "interests",
+    "projects",
 ]
 
 urlpatterns = [
