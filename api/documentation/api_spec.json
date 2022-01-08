@@ -1,620 +1,426 @@
 {
-    "openapi": "3.1.0",
-    "info": {
-      "title": "supervisio_api",
-      "version": "1.0"
-    },
-    "servers": [
-      {
-        "url": "http://localhost:3000"
-      }
-    ],
-    "paths": {
-      "/users/me/": {
-        "get": {
-          "summary": "Get logged in user",
-          "tags": [],
-          "responses": {
-            "200": {
-              "description": "OK",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            },
-            "401": {
-              "description": "Unauthorized"
-            }
-          },
-          "operationId": "get-users-me",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            }
-          ]
-        },
-        "patch": {
-          "summary": "Update user",
-          "operationId": "patch-users-me",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "403": {
-              "description": "Forbidden"
-            }
-          },
-          "description": "Only supervisors can use this.",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            }
-          ],
-          "requestBody": {
+  "openapi": "3.1.0",
+  "info": {
+    "title": "supervisio_api",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/users/me/": {
+      "get": {
+        "summary": "Get logged in user",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "capacity": {
-                      "type": "integer"
-                    },
-                    "bio": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
-        }
+        },
+        "operationId": "get-users-me",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "required": true
+          }
+        ]
       },
-      "/users/login/": {
-        "post": {
-          "summary": "Login",
-          "operationId": "post-users-login",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "token": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            }
-          },
-          "requestBody": {
+      "patch": {
+        "summary": "Update user",
+        "operationId": "patch-users-me",
+        "responses": {
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "email": {
-                      "type": "string"
-                    },
-                    "password": {
-                      "type": "string"
-                    }
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "description": "Only supervisors can use this.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "capacity": {
+                    "type": "integer"
                   },
-                  "required": [
-                    "email",
-                    "password"
-                  ]
+                  "bio": {
+                    "type": "string"
+                  }
                 }
               }
             }
           }
         }
-      },
-      "/users/logout/": {
-        "post": {
-          "summary": "Logout",
-          "operationId": "post-users-logout",
-          "responses": {
-            "200": {
-              "description": "OK"
-            },
-            "401": {
-              "description": "Unauthorized"
-            }
-          },
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "required": true,
-              "name": "Authorization"
-            }
-          ],
-          "description": "Deletes active authorization token."
-        }
-      },
-      "/interests/": {
-        "get": {
-          "summary": "Get interests",
-          "tags": [],
-          "responses": {
-            "200": {
-              "description": "OK",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/Interest"
+      }
+    },
+    "/users/login/": {
+      "post": {
+        "summary": "Login",
+        "operationId": "post-users-login",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
                     }
                   }
                 }
               }
-            },
-            "401": {
-              "description": "Unauthorized"
             }
           },
-          "operationId": "get-interests",
-          "description": "",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization"
-            }
-          ]
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
         },
-        "post": {
-          "summary": "Create new interest",
-          "operationId": "post-interests",
-          "responses": {
-            "201": {
-              "description": "Created",
-              "content": {
-                "application/json": {
-                  "schema": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/logout/": {
+      "post": {
+        "summary": "Logout",
+        "operationId": "post-users-logout",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true,
+            "name": "Authorization"
+          }
+        ],
+        "description": "Deletes active authorization token."
+      }
+    },
+    "/interests/": {
+      "get": {
+        "summary": "Get interests",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
                     "$ref": "#/components/schemas/Interest"
                   }
                 }
               }
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "403": {
-              "description": "Forbidden"
             }
           },
-          "description": "Only supervisors have access to this.\nInterest will only be created if it does not already exist.\nAutomatically marks the interest as favourite for the creator.",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization"
-            }
-          ],
-          "requestBody": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "operationId": "get-interests",
+        "description": "",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization"
+          },
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "in": "query",
+            "name": "is_favourite",
+            "description": "Filter by favourite"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create new interest",
+        "operationId": "post-interests",
+        "responses": {
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ]
+                  "$ref": "#/components/schemas/Interest"
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         },
-        "patch": {
-          "summary": "Update favourite interests",
-          "operationId": "patch-interests",
-          "responses": {
-            "200": {
-              "description": "OK"
+        "description": "Only supervisors have access to this.\nInterest will only be created if it does not already exist.\nAutomatically marks the interest as favourite for the creator.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
             },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            }
-          },
-          "description": "",
-          "parameters": [
-            {
+            "in": "header",
+            "name": "Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
               "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "interests": {
-                      "type": "array",
-                      "items": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "required": [
-                    "interests"
-                  ]
-                }
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
               }
             }
           }
         }
       },
-      "/projects/": {
-        "get": {
-          "summary": "Get projects",
-          "tags": [],
-          "responses": {
-            "200": {
-              "description": "OK",
-              "content": {
-                "application/json": {
-                  "schema": {
+      "patch": {
+        "summary": "Update favourite interests",
+        "operationId": "patch-interests",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "description": "",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "interests": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/Project"
+                      "type": "integer"
                     }
                   }
-                }
+                },
+                "required": [
+                  "interests"
+                ]
               }
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
             }
-          },
-          "operationId": "get-projects",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            },
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "query",
-              "name": "is_recommended",
-              "description": "Filter by recommended projects"
-            },
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "query",
-              "name": "phrase",
-              "description": "Search by phrase"
-            }
-          ],
-          "description": ""
-        },
-        "post": {
-          "summary": "Create project",
-          "operationId": "post-projects",
-          "responses": {
-            "201": {
-              "description": "Created",
-              "content": {
-                "application/json": {
-                  "schema": {
+          }
+        }
+      }
+    },
+    "/projects/": {
+      "get": {
+        "summary": "Get projects",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
                     "$ref": "#/components/schemas/Project"
                   }
                 }
               }
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "403": {
-              "description": "Forbidden"
             }
           },
-          "description": "Only supervisors can use this.",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "interests": {
-                      "type": "array",
-                      "items": {
-                        "type": "integer"
-                      }
-                    }
-                  }
-                }
-              }
-            }
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
-        }
-      },
-      "/projects/{id}/": {
+        },
+        "operationId": "get-projects",
         "parameters": [
           {
             "schema": {
               "type": "string"
             },
-            "name": "id",
-            "in": "path",
+            "in": "header",
+            "name": "Authorization",
             "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "is_recommended",
+            "description": "Filter by recommended projects"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "phrase",
+            "description": "Search by phrase"
           }
         ],
-        "delete": {
-          "summary": "Delete project",
-          "operationId": "delete-projects-id",
-          "responses": {
-            "200": {
-              "description": "OK"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "403": {
-              "description": "Forbidden"
-            },
-            "404": {
-              "description": "Not Found"
+        "description": ""
+      },
+      "post": {
+        "summary": "Create project",
+        "operationId": "post-projects",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
             }
           },
-          "description": "Only a supervisor can use this.\nAll applications for this project will also be deleted.",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            }
-          ]
-        }
-      },
-      "/project/{id}/apply/": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "description": "Only supervisors can use this.",
         "parameters": [
           {
             "schema": {
               "type": "string"
             },
-            "name": "id",
-            "in": "path",
+            "in": "header",
+            "name": "Authorization",
             "required": true
           }
         ],
-        "post": {
-          "summary": "Apply for project",
-          "operationId": "post-project-id-apply",
-          "responses": {
-            "201": {
-              "description": "Created"
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "403": {
-              "description": "Forbidden"
-            },
-            "404": {
-              "description": "Not Found"
-            }
-          },
-          "description": "Only students can use this.\nStudents cannot apply for the same project while the application is pending.",
-          "parameters": [
-            {
+        "requestBody": {
+          "content": {
+            "application/json": {
               "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/applications/": {
-        "get": {
-          "summary": "Get project applications",
-          "tags": [],
-          "responses": {
-            "200": {
-              "description": "OK",
-              "content": {
-                "application/json": {
-                  "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "interests": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/Application"
+                      "type": "integer"
                     }
                   }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            }
-          },
-          "operationId": "get-applications",
-          "description": "Only supervisors can access this.",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            },
-            {
-              "schema": {
-                "type": "boolean"
-              },
-              "in": "query",
-              "name": "is_approved",
-              "description": "Filter by approved applications"
-            }
-          ]
-        }
-      },
-      "/applications/{id}/review/": {
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "post": {
-          "summary": "Review application",
-          "operationId": "post-applications-id-review",
-          "responses": {
-            "200": {
-              "description": "OK"
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "403": {
-              "description": "Forbidden"
-            }
-          },
-          "description": "Only supervisors can use this.",
-          "parameters": [
-            {
-              "schema": {
-                "type": "string"
-              },
-              "in": "header",
-              "name": "Authorization",
-              "required": true
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "is_approved": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "is_approved"
-                  ]
                 }
               }
             }
@@ -622,101 +428,306 @@
         }
       }
     },
-    "components": {
-      "schemas": {
-        "Interest": {
-          "title": "Interest",
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer"
-            },
-            "name": {
-              "type": "string"
-            },
-            "is_favourite": {
-              "type": "boolean"
-            }
+    "/projects/{id}/": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "delete": {
+        "summary": "Delete project",
+        "operationId": "delete-projects-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
-        "Project": {
-          "title": "Project",
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer"
-            },
-            "supervisor": {
-              "$ref": "#/components/schemas/User"
-            },
-            "title": {
+        "description": "Only a supervisor can use this.\nAll applications for this project will also be deleted.",
+        "parameters": [
+          {
+            "schema": {
               "type": "string"
             },
-            "description": {
-              "type": "string"
-            },
-            "views": {
-              "type": "integer"
-            },
-            "recommended_count": {
-              "type": "integer"
-            },
-            "application_sent": {
-              "type": "boolean"
-            },
-            "applications_count": {
-              "type": "string"
-            }
+            "in": "header",
+            "name": "Authorization",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/project/{id}/apply/": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "post": {
+        "summary": "Apply for project",
+        "operationId": "post-project-id-apply",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
-        "User": {
-          "title": "User",
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer"
-            },
-            "first_name": {
+        "description": "Only students can use this.\nStudents cannot apply for the same project while the application is pending.",
+        "parameters": [
+          {
+            "schema": {
               "type": "string"
             },
-            "last_name": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "is_supervisor": {
-              "type": "boolean"
-            },
-            "capacity": {
-              "type": "integer"
-            },
-            "bio": {
-              "type": "string"
+            "in": "header",
+            "name": "Authorization",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
+        }
+      }
+    },
+    "/applications/": {
+      "get": {
+        "summary": "Get project applications",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Application"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
         },
-        "Application": {
-          "title": "Application",
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer"
-            },
-            "student": {
-              "$ref": "#/components/schemas/User"
-            },
-            "project": {
-              "$ref": "#/components/schemas/Project"
-            },
-            "message": {
+        "operationId": "get-applications",
+        "description": "Only supervisors can access this.",
+        "parameters": [
+          {
+            "schema": {
               "type": "string"
             },
-            "status": {
+            "in": "header",
+            "name": "Authorization",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "in": "query",
+            "name": "is_approved",
+            "description": "Filter by approved applications"
+          }
+        ]
+      }
+    },
+    "/applications/{id}/review/": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "post": {
+        "summary": "Review application",
+        "operationId": "post-applications-id-review",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "description": "Only supervisors can use this.",
+        "parameters": [
+          {
+            "schema": {
               "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "is_approved": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "is_approved"
+                ]
+              }
             }
           }
         }
       }
     }
+  },
+  "components": {
+    "schemas": {
+      "Interest": {
+        "title": "Interest",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "is_favourite": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Project": {
+        "title": "Project",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "supervisor": {
+            "$ref": "#/components/schemas/User"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "views": {
+            "type": "integer"
+          },
+          "recommended_count": {
+            "type": "integer"
+          },
+          "application_sent": {
+            "type": "boolean"
+          },
+          "applications_count": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "is_supervisor": {
+            "type": "boolean"
+          },
+          "capacity": {
+            "type": "integer"
+          },
+          "bio": {
+            "type": "string"
+          }
+        }
+      },
+      "Application": {
+        "title": "Application",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "student": {
+            "$ref": "#/components/schemas/User"
+          },
+          "project": {
+            "$ref": "#/components/schemas/Project"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      }
+    }
   }
+}

@@ -1,11 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import action
+from rest_framework.decorators import action, authentication_classes
 from rest_framework.exceptions import ValidationError as DRFValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from api.users.models import User
+from api.users.serializers import UserPostSerializer, UserSerializer
 from api.users.utils import get_token_response
 
 
@@ -41,3 +42,25 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Token.objects.get(user=request.user).delete()
         return Response({"detail": "User logged out."}, status=200)
+
+    @action(
+        detail=False,
+        methods=["GET", "PATCH"],
+        url_path="me",
+        authentication_classes=[IsAuthenticated],
+    )
+    def users_me(self, request):
+        """
+        Endpoint to manage the currently logged in user.
+        """
+        user = request.user
+        if request.method == "GET":
+            return Response(UserSerializer(user).data)
+        if request.method == "PATCH":
+            if not user.is_supervisor:
+                return Response({"detail": "User is not supervisor."}, status=403)
+            serializer = UserPostSerializer(user, data=request.data, partial=True)
+            if not serializer.is_valid():
+                return Response(serializer.errors)
+            serializer.save()
+            return Response(200)

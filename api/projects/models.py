@@ -5,6 +5,7 @@ from api.models import TimestampedModel
 
 class Project(TimestampedModel):
     supervisor = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    interests = models.ManyToManyField("interests.Interest", blank=True)
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     views = models.IntegerField(default=0)

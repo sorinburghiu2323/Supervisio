@@ -34,3 +34,22 @@ class UserTests(APITestCase):
             },
         )
         self.assertEqual(response.status_code, 401)
+
+    def test_get_me(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.get(self.url + "me/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["email"], self.user.email)
+
+    def test_update_me(self):
+        # User is not supervisor.
+        self.client.force_authenticate(self.user)
+        response = self.client.patch(self.url + "me/")
+        self.assertEqual(response.status_code, 403)
+
+        # Update bio of supervisor.
+        self.user.is_supervisor = True
+        self.user.save()
+        response = self.client.patch(self.url + "me/", {"bio": "test"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.user.bio, "test")
