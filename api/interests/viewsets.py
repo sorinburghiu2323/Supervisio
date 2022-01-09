@@ -1,5 +1,9 @@
+import ast
+
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from api.interests.models import Interest
 
 from api.interests.serializers import InterestSerializer
@@ -27,3 +31,40 @@ class InterestViewSet(viewsets.ModelViewSet):
             )
 
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        # Validation checks.
+        user = request.user
+        if not user.is_supervisor:
+            return Response(
+                {"detail": "Only a supervisor can create interests."}, status=403
+            )
+        name = request.data.get("name", None)
+        if name is None:
+            return Response({"detail": "Required body missing."}, status=400)
+
+        # Get or create the interest.
+        # If it exists and it is marked as favourite by the user, return error.
+        name = name.lower()
+        interest, created = Interest.objects.get_or_create(name=name)
+        if not created and interest in user.interests.all():
+            return Response(
+                {"detail": "Interest is already marked as favourite."}, status=400
+            )
+        user.interests.add(interest)
+        return Response(InterestSerializer(interest).data)
+
+    def patch(self, request, *args, **kwargs):
+        # Check body.
+        interests = request.data.get("interests", None)
+        if interests is None:
+            return Response({"detail": "Required body missing."}, status=400)
+
+        # Check if body is in right format.
+        try:
+            interests = ast.literal_eval(interests)
+            interests = Interest.objects.filter(id__in=interests)
+        except Exception:
+            return Response({"detail": "Invalid body."}, status=400)
+        request.user.interests.set(interests)
+        return Response(200)
