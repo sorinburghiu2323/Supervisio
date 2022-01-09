@@ -1,4 +1,5 @@
 from api.interests.models import Interest
+from api.projects.models import Project
 from api.users.models import User
 
 
@@ -18,3 +19,11 @@ def test_user(email="test@example.com", is_supervisor=False):
 def test_interest(name="machine learning"):
     interest, _ = Interest.objects.get_or_create(name=name)
     return interest
+
+
+def test_project(title="aco"):
+    project, _ = Project.objects.get_or_create(
+        title=title,
+        supervisor=test_user(),
+    )
+    return project
