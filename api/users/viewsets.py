@@ -1,7 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import action, authentication_classes
-from rest_framework.exceptions import ValidationError as DRFValidationError
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -61,6 +60,6 @@ class UserViewSet(viewsets.ModelViewSet):
                 return Response({"detail": "User is not supervisor."}, status=403)
             serializer = UserPostSerializer(user, data=request.data, partial=True)
             if not serializer.is_valid():
-                return Response(serializer.errors)
+                return Response(serializer.errors, status=400)
             serializer.save()
-            return Response(200)
+            return Response(status=200)

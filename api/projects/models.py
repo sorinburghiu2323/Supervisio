@@ -15,7 +15,7 @@ class Project(TimestampedModel):
         return f"{self.supervisor.email} - {self.title}"
 
 
-class ProjectApplications(TimestampedModel):
+class ProjectApplication(TimestampedModel):
     class ApplicationStatus(models.TextChoices):
         PENDING = "pending"
         APPROVED = "approved"

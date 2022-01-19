@@ -66,4 +66,4 @@ class InterestViewSet(viewsets.ModelViewSet):
         except Exception:
             return Response({"detail": "Invalid body."}, status=400)
         request.user.interests.set(interests)
-        return Response(200)
+        return Response(status=200)

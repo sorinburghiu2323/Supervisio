@@ -1,5 +1,5 @@
 from api.interests.models import Interest
-from api.projects.models import Project
+from api.projects.models import Project, ProjectApplication
 from api.users.models import User
 
 
@@ -27,3 +27,12 @@ def test_project(title="aco"):
         supervisor=test_user(),
     )
     return project
+
+
+def test_application(status="pending"):
+    application, _ = ProjectApplication.objects.get_or_create(
+        student=test_user(),
+        project=test_project(),
+        status=status,
+    )
+    return application
