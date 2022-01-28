@@ -89,3 +89,8 @@ Run tests using:
 ```
 python manage.py test
 ```
+
+Command to generate dummy data for testing:
+```
+python manage.py bootstrap
+```

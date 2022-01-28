@@ -63,3 +63,13 @@ class UserViewSet(viewsets.ModelViewSet):
                 return Response(serializer.errors, status=400)
             serializer.save()
             return Response(status=200)
+
+    @action(
+        detail=False,
+        methods=["GET"],
+        url_path="supervisors",
+        authentication_classes=[IsAuthenticated],
+    )
+    def users_supervisors(self, request):
+        supervisors = User.objects.filter(is_supervisor=True)
+        return Response(UserSerializer(supervisors, many=True).data)

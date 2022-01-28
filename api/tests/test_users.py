@@ -53,3 +53,17 @@ class UserTests(APITestCase):
         response = self.client.patch(self.url + "me/", {"bio": "test"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.user.bio, "test")
+
+    def test_get_supervisors(self):
+        # Get supervisors when no supervisors.
+        self.client.force_authenticate(self.user)
+        response = self.client.get(self.url + "supervisors/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 0)
+
+        # Get supervisors with 1 supervisor.
+        self.user.is_supervisor = True
+        self.user.save()
+        response = self.client.get(self.url + "supervisors/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)

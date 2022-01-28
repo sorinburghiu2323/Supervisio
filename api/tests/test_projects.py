@@ -23,6 +23,30 @@ class ProjectTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
 
+    def test_get_projects_filter_by_interests(self):
+        # No interests.
+        response = self.client.get(self.url, {"interests": "[]"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 0)
+
+        # Get projects with interests.
+        interest = test_interest()
+        self.project.interests.add(interest)
+        response = self.client.get(self.url, {"interests": f"[{interest.id}]"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+
+    def test_get_projects_filter_by_supervisors(self):
+        # Non existing supervisor.
+        response = self.client.get(self.url, {"supervisor": f"{self.user.id + 1}"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 0)
+
+        # Existing supervisor.
+        response = self.client.get(self.url, {"supervisor": f"{self.user.id}"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
     def test_create_project(self):
         # Students cannot create projects.
         response = self.client.post(self.url)

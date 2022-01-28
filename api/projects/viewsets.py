@@ -1,3 +1,4 @@
+import ast
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -30,6 +31,23 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if phrase is not None:
             for term in phrase.split():
                 queryset = queryset.filter(title__icontains=term)
+
+        # Filter by interests.
+        interests = self.request.GET.get("interests")
+        if interests is not None:
+            try:
+                interests = ast.literal_eval(interests)
+                queryset = queryset.filter(interests__in=interests)
+            except Exception:
+                pass
+
+        # Filter by supervisor.
+        supervisor = self.request.GET.get("supervisor")
+        if supervisor is not None:
+            try:
+                queryset = queryset.filter(supervisor=supervisor)
+            except Exception:
+                pass
 
         return queryset
 
