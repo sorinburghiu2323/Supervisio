@@ -2,3 +2,4 @@ django==3.1.6
 black==21.5b1  # Linter
 waitress==2.0.0  # To work with Docker
 djangorestframework==3.13.1  # API framework
+factory-boy==3.2.1  # Generate dummy data
