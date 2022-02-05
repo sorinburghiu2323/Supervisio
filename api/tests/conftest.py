@@ -3,7 +3,7 @@ from api.projects.models import Project, ProjectApplication
 from api.users.models import User
 
 
-def test_user(email="test@example.com", is_supervisor=False):
+def test_user(email="test@example.com", is_supervisor=False, interests=None):
     user, created = User.objects.get_or_create(
         email=email,
         first_name="Test",
@@ -13,6 +13,8 @@ def test_user(email="test@example.com", is_supervisor=False):
     if created:
         user.set_password("Password1")
         user.save()
+        if interests:
+            user.interests.set(interests)
     return user
 
 
@@ -21,11 +23,13 @@ def test_interest(name="machine learning"):
     return interest
 
 
-def test_project(title="aco"):
-    project, _ = Project.objects.get_or_create(
+def test_project(title="aco", interests=None):
+    project, created = Project.objects.get_or_create(
         title=title,
         supervisor=test_user(),
     )
+    if created and interests:
+        project.interests.set(interests)
     return project
 
 

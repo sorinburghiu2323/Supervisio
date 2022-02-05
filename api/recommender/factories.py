@@ -7,7 +7,7 @@ from api.users.models import User
 
 
 class UserFactory(DjangoModelFactory):
-    email = factory.Faker('email')
+    email = factory.Faker("email")
 
     class Meta:
         model = User
@@ -21,7 +21,7 @@ class ProjectFactory(DjangoModelFactory):
 
 
 class InterestFactory(DjangoModelFactory):
-    name = factory.Faker('name')
-    
+    name = factory.Faker("name")
+
     class Meta:
         model = Interest
