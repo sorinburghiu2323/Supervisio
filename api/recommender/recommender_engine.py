@@ -9,6 +9,7 @@ class BaseRecommender:
     Abstract class to implement project and supervisor recommendations.
     Consits of reusable functions that can be used throughout any approach.
     """
+
     def __init__(self, user: User) -> None:
         self.user = user
         self.user_interests = user.interests.all()
@@ -55,23 +56,45 @@ class BaseRecommender:
 
 
 class LinearRecommender(BaseRecommender):
-    def __init__(self, user: User) -> None:
-        self.user = user
-        self.user_interests = user.interests.all()
-
     def __get_recommendations(self, model: Tuple[Project, User]) -> List:
         """
         Get recommendations calculating liner factor relevance.
         :param model: Either Project or User.
         :return: List of recommendations.
         """
-        instances = model.objects.filter(
-            interests__in=list(self.user_interests)
-        ).distinct()
+        if model == User:
+            instances = model.objects.filter(is_supervisor=True)
+        else:
+            instances = model.objects.all()
+        instances = instances.filter(interests__in=list(self.user_interests)).distinct()
         relevance = []
         for instance in instances:
             relevance.append(self._calculate_interest_match_factor(instance))
         return self._order_linearly(instances, relevance)[:3]
+
+    def get_supervisor_recommendations(self):
+        return self.__get_recommendations(User)
+
+    def get_project_recommendations(self):
+        return self.__get_recommendations(Project)
+
+
+class DistributedRecommender(BaseRecommender):
+    def __get_recommendations(self, model: Tuple[Project, User]) -> List:
+        """
+        Get recommendations using a weighted shuffle approach.
+        :param model: Either Project or User.
+        :return: List of recommendations.
+        """
+        if model == User:
+            instances = model.objects.filter(is_supervisor=True)
+        else:
+            instances = model.objects.all()
+        instances = instances.filter(interests__in=list(self.user_interests)).distinct()
+        relevance = []
+        for instance in instances:
+            relevance.append(self._calculate_interest_match_factor(instance))
+        return self._weighted_shuffle(instances, relevance)[:3]
 
     def get_supervisor_recommendations(self):
         return self.__get_recommendations(User)

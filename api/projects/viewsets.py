@@ -11,6 +11,8 @@ from api.projects.serializers import (
     ProjectPostSerializer,
     ProjectSerializer,
 )
+from api.recommender.recommender_engine import LinearRecommender
+from api.users.serializers import UserSerializer
 from api.utils import convert_to_bool
 
 
@@ -100,6 +102,21 @@ class ProjectViewSet(viewsets.ModelViewSet):
             message=message,
         )
         return Response(status=201)
+
+    @action(detail=False, methods=["GET"], url_path="recommendations")
+    def get_recommendations(self, request):
+        recommender_engine = LinearRecommender(request.user)
+        return Response(
+            {
+                "projects": ProjectSerializer(
+                    recommender_engine.get_project_recommendations(), many=True
+                ).data,
+                "supervisors": UserSerializer(
+                    recommender_engine.get_supervisor_recommendations(), many=True
+                ).data,
+            },
+            status=200,
+        )
 
 
 class ProjectApplicationViewSet(viewsets.ModelViewSet):

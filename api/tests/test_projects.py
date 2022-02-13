@@ -120,6 +120,20 @@ class ProjectTests(APITestCase):
             ).exists()
         )
 
+    def test_get_project_recommendations(self):
+        # Create supervisor, project and user with the same interest.
+        interest = test_interest()
+        self.user.interests.add(interest)
+        self.project.interests.add(interest)
+        self.project_2.interests.add(interest)
+        test_user(
+            email="supervisor@example.com", is_supervisor=True, interests=[interest]
+        )
+        response = self.client.get(self.url + "recommendations/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data["projects"]), 2)
+        self.assertEqual(len(response.data["supervisors"]), 1)
+
 
 class ProjectApplicationTests(APITestCase):
     def setUp(self) -> None:
