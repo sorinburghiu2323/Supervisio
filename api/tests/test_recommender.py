@@ -3,7 +3,11 @@ from api.interests.models import Interest
 from api.projects.models import Project
 
 from api.recommender.generator import Generator
-from api.recommender.recommender_engine import LinearRecommender
+from api.recommender.plot import plot_values
+from api.recommender.recommender_engine import DistributedRecommender, LinearRecommender
+from api.recommender.satisfaction_calculator import (
+    calculate_recommendation_satisfaction,
+)
 from api.tests.conftest import test_interest, test_project, test_user
 from api.users.models import User
 
@@ -35,3 +39,16 @@ class RecommenderTests(APITestCase):
             list(recommendations)
             in [[project_3, project_2, project_1], [project_3, project_1, project_2]]
         )
+
+    def test_simulation(self):
+        Generator(500)
+        students = User.objects.filter(is_supervisor=False)
+        satisfaction = []
+        for user in students:
+            recommender = DistributedRecommender(user)
+            projects = recommender.get_project_recommendations()
+            supervisors = recommender.get_supervisor_recommendations()
+            satisfaction.append(
+                calculate_recommendation_satisfaction(user, projects, supervisors)
+            )
+        plot_values(satisfaction, recommender.name)

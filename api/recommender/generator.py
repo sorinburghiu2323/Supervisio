@@ -1,5 +1,6 @@
 from typing import List
 from django.db import IntegrityError, transaction
+from rest_framework.exceptions import ValidationError
 
 import random
 
@@ -82,7 +83,7 @@ class Generator:
             try:
                 with transaction.atomic():
                     return InterestFactory()
-            except IntegrityError:
+            except ValidationError:
                 continue
 
     def generate_project(self, supervisor: User, interests: List[Interest]) -> Project:

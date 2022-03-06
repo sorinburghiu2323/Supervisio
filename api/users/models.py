@@ -47,6 +47,7 @@ class User(TimestampedModel, AbstractBaseUser, PermissionsMixin):
     # Supervisor only field.
     capacity = models.IntegerField(default=5)
     bio = models.TextField(null=True, blank=True)
+    recommended_count = models.IntegerField(default=0)
 
     # Permissions fields.
     is_supervisor = models.BooleanField(default=False)

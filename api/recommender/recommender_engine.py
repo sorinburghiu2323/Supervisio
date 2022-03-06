@@ -10,6 +10,8 @@ class BaseRecommender:
     Consits of reusable functions that can be used throughout any approach.
     """
 
+    name = "Base recommender"
+
     def __init__(self, user: User) -> None:
         self.user = user
         self.user_interests = user.interests.all()
@@ -41,7 +43,7 @@ class BaseRecommender:
             for _, x in sorted(queryset_weights, key=lambda x: int(x[0]), reverse=True)
         ]
 
-    def _weighted_shuffle(items: list, weights: List[float]):
+    def _weighted_shuffle(self, items: list, weights: List[float]):
         """
         Weighted Random Sampling (2005; Efraimidis, Spirakis), complexity: O(n log(n)).
         Algorithm to shuffle list given a list of corresponding weights.
@@ -56,6 +58,8 @@ class BaseRecommender:
 
 
 class LinearRecommender(BaseRecommender):
+    name = "Linear recommender"
+
     def __get_recommendations(self, model: Tuple[Project, User]) -> List:
         """
         Get recommendations calculating liner factor relevance.
@@ -80,6 +84,8 @@ class LinearRecommender(BaseRecommender):
 
 
 class DistributedRecommender(BaseRecommender):
+    name = "Liner distributed recommender"
+
     def __get_recommendations(self, model: Tuple[Project, User]) -> List:
         """
         Get recommendations using a weighted shuffle approach.
