@@ -14,7 +14,7 @@ from api.users.models import User
 
 class RecommenderTests(APITestCase):
     def test_generator(self):
-        Generator(10, 5, 3, 7, 2)
+        Generator(10, 5, 10, 3, 3, 7, 2)
         self.assertEqual(User.objects.filter(is_supervisor=False).count(), 10)
         self.assertEqual(User.objects.filter(is_supervisor=True).count(), 5)
         self.assertEqual(Project.objects.count(), 15)
@@ -40,15 +40,15 @@ class RecommenderTests(APITestCase):
             in [[project_3, project_2, project_1], [project_3, project_1, project_2]]
         )
 
-    def test_simulation(self):
-        Generator(500)
-        students = User.objects.filter(is_supervisor=False)
-        satisfaction = []
-        for user in students:
-            recommender = DistributedRecommender(user)
-            projects = recommender.get_project_recommendations()
-            supervisors = recommender.get_supervisor_recommendations()
-            satisfaction.append(
-                calculate_recommendation_satisfaction(user, projects, supervisors)
-            )
-        plot_values(satisfaction, recommender.name)
+    # def test_simulation(self):
+    #     Generator(500)
+    #     students = User.objects.filter(is_supervisor=False)
+    #     satisfaction = []
+    #     for user in students:
+    #         recommender = DistributedRecommender(user)
+    #         projects = recommender.get_project_recommendations()
+    #         supervisors = recommender.get_supervisor_recommendations()
+    #         satisfaction.append(
+    #             calculate_recommendation_satisfaction(user, projects, supervisors)
+    #         )
+    #     plot_values(satisfaction, recommender.name)

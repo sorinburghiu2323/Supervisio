@@ -14,6 +14,7 @@ api_namespaces = [
     "users",
     "interests",
     "projects",
+    "grades",
 ]
 
 urlpatterns = [
