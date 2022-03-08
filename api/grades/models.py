@@ -22,3 +22,6 @@ class Grade(TimestampedModel):
 
     def __str__(self):
         return f"{self.student} - ({self.score}) {self.module}"
+
+    class Meta:
+        unique_together = ("student", "module")
