@@ -77,6 +77,10 @@ export default {
     padding: 10px;
     width: 15vw;
 }
+.input::placeholder {
+    color: #1D9A75;
+    font-family: inherit;
+}
 .login {
     border-style: solid;
     border-color: #707070;
@@ -86,6 +90,7 @@ export default {
     text-align: center;
     font-size: 20px;
     padding: 1vh 3vw 1vh 3vw;
+    font-weight: bold;
 }
 .login:hover {
     background-color: #187e5f;

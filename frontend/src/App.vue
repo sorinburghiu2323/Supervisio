@@ -1,17 +1,24 @@
 <template>
   <div id="app">
+    <Header v-if="this.$route.name !== 'Login'"/>
     <router-view/>
   </div>
 </template>
 
 <script>
+import Header from "@/components/Header";
+
 export default {
   name: 'App',
+  components: {
+    Header,
+  }
 }
 </script>
 
 <style>
 body {
+  margin: 0;
   min-height: 100vh;
   height: 100%;
   overflow: visible;
@@ -20,7 +27,7 @@ body {
 }
 #app {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
+  font-weight: 1000;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

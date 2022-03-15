@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div class="container">
+        <div class="title">
+            Search everything
+        </div>
         <div class="projects">
             <Project v-for="(project, index) in projects" :key="index" :project="project"/>
         </div>
@@ -36,6 +39,17 @@ export default {
 };
 </script>
 <style scoped>
+.container {
+    display: flex;
+    flex-direction: column;
+}
+.title {
+    margin-bottom: 20px;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 20px;
+}
 .projects {
     display: flex;
     flex-wrap: wrap;
