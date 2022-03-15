@@ -27,7 +27,7 @@ class Generator:
         students_num: int = 1000,
         supervisors_num: int = 50,
         modules_num: int = 30,
-        grades_per_student=10,
+        grades_per_student: int = 10,
         projects_per_supervisor: int = 5,
         interests_num: int = 100,
         max_assigned_interests: int = 3,

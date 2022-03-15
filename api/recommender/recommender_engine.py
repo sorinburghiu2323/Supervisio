@@ -1,6 +1,8 @@
 import random
 from typing import List, Tuple
+from api.grades.models import Grade
 from api.projects.models import Project
+from api.recommender.utils import calculate_grade_relevance, calculate_interest_match_factor
 from api.users.models import User
 
 
@@ -15,6 +17,7 @@ class BaseRecommender:
     def __init__(self, user: User) -> None:
         self.user = user
         self.user_interests = user.interests.all()
+        self.grades = Grade.objects.filter(student=self.user)
 
     def get_project_recommendations(self):
         raise NotImplementedError()
@@ -22,13 +25,11 @@ class BaseRecommender:
     def get_supervisor_recommendations(self):
         raise NotImplementedError()
 
-    def _calculate_interest_match_factor(self, object: Tuple[Project, User]) -> int:
-        """
-        Get score of how well a project matches an interest.
-        :param project: Project/User instance.
-        :return: int.
-        """
-        return len(list(set(object.interests.all()).intersection(self.user_interests)))
+    def _calculate_grade_relevance(self, object: Tuple[Project, User]) -> float:
+        total = 0
+        for grade in self.grades:
+            total += len(list(set(object.interests.all()).intersection(grade.module.interests.all()))) * grade.score
+        return total
 
     def _order_linearly(self, queryset: List, weights: List[float]) -> List:
         """
@@ -73,7 +74,7 @@ class LinearRecommender(BaseRecommender):
         instances = instances.filter(interests__in=list(self.user_interests)).distinct()
         relevance = []
         for instance in instances:
-            relevance.append(self._calculate_interest_match_factor(instance))
+            relevance.append(calculate_interest_match_factor(self.user_interests, instance) + calculate_grade_relevance(self.grades, instance))
         return self._order_linearly(instances, relevance)[:3]
 
     def get_supervisor_recommendations(self):
@@ -84,7 +85,7 @@ class LinearRecommender(BaseRecommender):
 
 
 class DistributedRecommender(BaseRecommender):
-    name = "Liner distributed recommender"
+    name = "Linear distributed recommender"
 
     def __get_recommendations(self, model: Tuple[Project, User]) -> List:
         """
@@ -99,7 +100,7 @@ class DistributedRecommender(BaseRecommender):
         instances = instances.filter(interests__in=list(self.user_interests)).distinct()
         relevance = []
         for instance in instances:
-            relevance.append(self._calculate_interest_match_factor(instance))
+            relevance.append(calculate_interest_match_factor(self.user_interests, instance) + calculate_grade_relevance(self.grades, instance))
         return self._weighted_shuffle(instances, relevance)[:3]
 
     def get_supervisor_recommendations(self):
