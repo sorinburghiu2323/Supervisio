@@ -1,8 +1,13 @@
-import Vue from 'vue'
-import App from './App.vue'
+import App from "./App.vue";
+import Vue from "vue";
+import router from "./router/router.js";
 
-Vue.config.productionTip = false
+
+Vue.config.devtools = true;
+Vue.config.productionTip = false;
+Vue.prototype.$authToken = localStorage.authToken ? JSON.parse(localStorage.authToken) : "none";
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  router,
+  render: (h) => h(App),
+}).$mount("#app");
