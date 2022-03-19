@@ -1,6 +1,18 @@
 <template>
     <div class="container">
         <div class="title">
+            Recommended projects
+        </div>
+        <div class="projects">
+            <Project v-for="(project, index) in recommendedProjects" :key="index" :project="project"/>
+        </div>
+        <div class="title">
+            Recommended supervisors
+        </div>
+        <div class="projects">
+            <Supervisor v-for="(supervisor, index) in recommendedSupervisors" :key="index" :supervisor="supervisor"/>
+        </div>
+        <div class="title">
             Search everything
         </div>
         <div class="projects">
@@ -11,18 +23,23 @@
 <script>
 import axios from "axios";
 import Project from "@/components/Project";
+import Supervisor from "@/components/Supervisor";
 
 export default {
     name: "Dashboard",
     components: {
         Project,
+        Supervisor,
     },
     data() {
         return {
             projects: [],
+            recommendedProjects: [],
+            recommendedSupervisors: [],
         }
     },
     mounted() {
+        this.getRecommendations();
         this.getProjects();
     },
     methods: {
@@ -34,7 +51,17 @@ export default {
             .catch((error) => {
                 console.error(error);
             });
-        }
+        },
+        async getRecommendations() {
+            await axios.get("api/projects/recommendations/", { headers: { Authorization: this.$authToken } })
+            .then((response) => {
+                this.recommendedProjects = response.data.projects;
+                this.recommendedSupervisors = response.data.supervisors;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        },
     }
 };
 </script>

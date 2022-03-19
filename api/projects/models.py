@@ -14,6 +14,15 @@ class Project(TimestampedModel):
     def __str__(self):
         return f"{self.supervisor.email} - {self.title}"
 
+    def save(self, *args, **kwargs):
+        super(Project, self).save(*args, **kwargs)
+        # Update supervisor interests.
+        supervisor_projects = Project.objects.filter(supervisor=self.supervisor)
+        interests = []
+        for project in supervisor_projects:
+            interests.extend(list(project.interests.all()))
+        self.supervisor.interests.set(interests)
+
 
 class ProjectApplication(TimestampedModel):
     class ApplicationStatus(models.TextChoices):

@@ -17,7 +17,9 @@ def calculate_interest_match_factor(
     return len(list(set(object.interests.all()).intersection(user_interests)))
 
 
-def calculate_grade_relevance(grades: List[Grade], object: Tuple[Project, User]) -> float:
+def calculate_grade_relevance(
+    grades: List[Grade], object: Tuple[Project, User]
+) -> float:
     """
     Calculate how relevant a grade is to a project/supervisor.
     :param grades: List of user grades.
@@ -26,5 +28,16 @@ def calculate_grade_relevance(grades: List[Grade], object: Tuple[Project, User])
     """
     total = 0
     for grade in grades:
-        total += 1 + len(list(set(object.interests.all()).intersection(grade.module.interests.all()))) * grade.score / 100
+        total += (
+            1
+            + len(
+                list(
+                    set(object.interests.all()).intersection(
+                        grade.module.interests.all()
+                    )
+                )
+            )
+            * grade.score
+            / 100
+        )
     return total

@@ -91,6 +91,7 @@ export default {
     font-size: 20px;
     padding: 1vh 3vw 1vh 3vw;
     font-weight: bold;
+    cursor: pointer;
 }
 .login:hover {
     background-color: #187e5f;

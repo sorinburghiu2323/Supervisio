@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
 import Login from "../views/Login.vue";
+import ProjectPage from "../views/ProjectPage.vue";
 import axios from "axios";
 
 
@@ -18,6 +19,11 @@ const routes = [
     name: "Login",
     component: Login,
   },
+  {
+    path: "/projects/:id",
+    name: "ProjectPage",
+    component: ProjectPage,
+  }
 ];
 
 const router = new VueRouter({

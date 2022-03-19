@@ -36,6 +36,32 @@ def generate_dummy_data():
     This is taken from University of Exeter 3rd Year Dissertation
     proposals made by supervisors in academic year 2020-2021.
     """
+    # Create interests.
+    interests = [
+        "climate change",
+        "social media",
+        "data science",
+        "complex networks",
+        "human mind",
+        "fault detection",
+        "machine learning",
+        "statistics",
+        "modelling",
+        "optimisation",
+        "networking",
+        "knowledge",
+    ]
+    interests = [Interest.objects.create(name=interest) for interest in interests]
+
+    # Create student.
+    student = User.objects.create_user(
+        first_name="Igor",
+        last_name="Baker",
+        email="ib123@exeter.ac.uk",
+        password="Pa55w0rd1",
+    )
+    student.interests.set([interests[5], interests[11], interests[6]])
+
     # Create supervisors.
     supervisors = [
         "Massimo Stella",
@@ -65,32 +91,16 @@ def generate_dummy_data():
         # "Marcos Oliveira",
     ]
     supervisors = [
-        User.objects.create(
+        User.objects.create_user(
             first_name=supervisor.split()[0],
             last_name=supervisor.split()[-1],
             email=f"{supervisor.replace(' ', '').lower()}@example.com",
             password="Pa55w0rd1",
             is_supervisor=True,
+            bio="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         )
         for supervisor in supervisors
     ]
-
-    # Create interests.
-    interests = [
-        "climate change",
-        "social media",
-        "data science",
-        "complex networks",
-        "human mind",
-        "fault detection",
-        "machine learning",
-        "statistics",
-        "modelling",
-        "optimisation",
-        "networking",
-        "knowledge",
-    ]
-    interests = [Interest.objects.create(name=interest) for interest in interests]
 
     # Create projects.
     project = Project.objects.create(

@@ -53,6 +53,17 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve individual project.
+        """
+        project = self.get_object()
+        project.views += 1
+        project.save()
+        return Response(
+            ProjectSerializer(project, context={"request": request}).data, status=200
+        )
+
     def destroy(self, request, *args, **kwargs):
         """
         Allow a supervisor to delete one of their projects assuming it has

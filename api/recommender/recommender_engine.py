@@ -2,7 +2,10 @@ import random
 from typing import List, Tuple
 from api.grades.models import Grade
 from api.projects.models import Project
-from api.recommender.utils import calculate_grade_relevance, calculate_interest_match_factor
+from api.recommender.utils import (
+    calculate_grade_relevance,
+    calculate_interest_match_factor,
+)
 from api.users.models import User
 
 
@@ -28,7 +31,16 @@ class BaseRecommender:
     def _calculate_grade_relevance(self, object: Tuple[Project, User]) -> float:
         total = 0
         for grade in self.grades:
-            total += len(list(set(object.interests.all()).intersection(grade.module.interests.all()))) * grade.score
+            total += (
+                len(
+                    list(
+                        set(object.interests.all()).intersection(
+                            grade.module.interests.all()
+                        )
+                    )
+                )
+                * grade.score
+            )
         return total
 
     def _order_linearly(self, queryset: List, weights: List[float]) -> List:
@@ -74,7 +86,10 @@ class LinearRecommender(BaseRecommender):
         instances = instances.filter(interests__in=list(self.user_interests)).distinct()
         relevance = []
         for instance in instances:
-            relevance.append(calculate_interest_match_factor(self.user_interests, instance) + calculate_grade_relevance(self.grades, instance))
+            relevance.append(
+                calculate_interest_match_factor(self.user_interests, instance)
+                + calculate_grade_relevance(self.grades, instance)
+            )
         return self._order_linearly(instances, relevance)[:3]
 
     def get_supervisor_recommendations(self):
@@ -100,7 +115,10 @@ class DistributedRecommender(BaseRecommender):
         instances = instances.filter(interests__in=list(self.user_interests)).distinct()
         relevance = []
         for instance in instances:
-            relevance.append(calculate_interest_match_factor(self.user_interests, instance) + calculate_grade_relevance(self.grades, instance))
+            relevance.append(
+                calculate_interest_match_factor(self.user_interests, instance)
+                + calculate_grade_relevance(self.grades, instance)
+            )
         return self._weighted_shuffle(instances, relevance)[:3]
 
     def get_supervisor_recommendations(self):
