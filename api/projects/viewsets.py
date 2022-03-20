@@ -97,8 +97,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 {"detail": "Only students can apply for projects."}, status=403
             )
         project = self.get_object()
-        if ProjectApplication.objects.filter(
-            student=user, project=project, status__in=["pending", "approved"]
+        applications = ProjectApplication.objects.filter(student=user)
+        if applications.filter(
+            project=project, status__in=["pending", "approved"]
         ).exists():
             return Response(
                 {
@@ -106,6 +107,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 },
                 status=400,
             )
+        if applications.filter(status="pending").count() >= 3:
+            return Response(
+                {"detail": "You cannot have more than 3 open applications at a time."},
+                status=400,
+            )
+
         message = request.data.get("message")
         ProjectApplication.objects.create(
             student=user,

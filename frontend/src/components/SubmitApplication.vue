@@ -1,25 +1,52 @@
 <template>
     <div class="container">
-        <div class="x" v-on:click="$emit('closePopup')">
+        <div class="x" v-on:click="closePopup()">
             X
         </div>
-        <div class="title">
+        <div class="title" v-if="responseOutput">
+            {{ responseOutput }}
+        </div>
+        <div class="title" v-if="!responseOutput">
             Submit application
         </div>
-        <div class="description">
+        <div class="description" v-if="!responseOutput">
             Message
         </div>
-        <textarea class="input" rows=15>
+        <textarea v-model="message" class="input" rows=15 v-if="!responseOutput">
         </textarea>
-        <button class="submit"> Submit </button>
+        <button class="submit" @click="sendApplication()" v-if="!responseOutput"> Submit </button>
     </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
     name: "SubmitApplication",
     props: {
         projectId: Number,
     },
+    data() {
+        return {
+            message: "",
+            responseOutput: "",
+        }
+    },
+    methods: {
+        sendApplication() {
+            axios.post(`/api/projects/${this.projectId}/apply/`, { message: this.message }, { headers: { Authorization: this.$authToken }})
+            .then(
+                this.responseOutput = "Application sent successfully."
+            )
+            .catch((error) => {
+                console.error(error);
+                this.responseOutput = error.response.data.detail;
+            })
+        },
+        closePopup() {
+            this.responseOutput = "";
+            this.$emit('closePopup');
+        }
+    }
 }
 </script>
 <style scoped>
@@ -40,6 +67,8 @@ export default {
     text-align: center;
     font-size: 20px;
     font-weight: bold;
+    width: 80%;
+    margin: auto;
 }
 .description {
     text-align: left;
