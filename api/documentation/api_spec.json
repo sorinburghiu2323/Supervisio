@@ -960,6 +960,12 @@
           },
           "applications_count": {
             "type": "string"
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Interest"
+            }
           }
         }
       },

@@ -10,7 +10,12 @@
             Recommended supervisors
         </div>
         <div class="projects">
-            <Supervisor v-for="(supervisor, index) in recommendedSupervisors" :key="index" :supervisor="supervisor"/>
+            <Supervisor 
+                v-for="(supervisor, index) in recommendedSupervisors" 
+                :key="index" 
+                :supervisor="supervisor"
+                @clickSupervisor="clickSupervisorCard(supervisor)"    
+            />
         </div>
         <div class="title">
             Search everything
@@ -136,6 +141,12 @@ export default {
                 console.error(error);
             });
         },
+        clickSupervisorCard(supervisor) {
+            this.search = "",
+            this.searchSupervisor = supervisor,
+            this.searchInterests = [],
+            this.searchProjects();
+        },
     }
 };
 </script>
@@ -171,9 +182,30 @@ export default {
     color: rgb(233, 233, 233);
 }
 .input {
-    margin-right: 20px;
+    border-style: solid;
+    border-color: #707070;
+    border-radius: 10px;
+    color: #1D9A75;
+    font-size: 15px;
+    padding: 10px;
+    width: 15vw;
+    margin-right: 2vw;
+}
+.input::placeholder {
+    color: #1D9A75;
+    font-family: inherit;
 }
 .supervisor-filter {
-    margin-right: 20px;
+    border-style: solid;
+    border-color: #707070;
+    border-radius: 10px;
+    margin-right: 2vw;
+    width: 15vw;
+}
+.interest-filter {
+    border-style: solid;
+    border-color: #707070;
+    border-radius: 10px;
+    width: 15vw;
 }
 </style>

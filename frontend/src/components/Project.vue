@@ -4,7 +4,11 @@
             {{ project.title }}
         </div>
         <div class="description">
-            {{ trimDescription(project.description) }}
+            {{ trimDescription(project.description) }} 
+            <br> <br>
+            Area:
+            <br>
+            {{ getInterests() }}
         </div>
         <div class="supervisor">
             {{ project.supervisor.first_name }} {{ project.supervisor.last_name }}
@@ -26,7 +30,10 @@ export default {
         },
         goToProject() {
             this.$router.push({ path: `/projects/${this.project.id}` })
-        }
+        },
+        getInterests() {
+            return this.project.interests.map(function (obj) { return obj.name; }).join(', ')
+        },
     }
 }
 </script>

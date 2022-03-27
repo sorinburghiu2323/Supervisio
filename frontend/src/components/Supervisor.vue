@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" @click="$emit('clickSupervisor')">
         <div class="title">
             {{ supervisor.first_name }} {{ supervisor.last_name }}
         </div>
@@ -29,13 +29,17 @@ export default {
     position: relative;
     margin: 20px;
     width: 28vw;
-    height: 18vh;
+    height: 15vh;
     background-color: white;
     color: #1D9A75;
     padding: 15px;
     display: flex;
     flex-direction: column;
     border-radius: 15px;
+    cursor: pointer;
+}
+.container:hover {
+    background-color: rgb(235, 235, 235);
 }
 .title {
     margin-bottom: 20px;

@@ -1,5 +1,6 @@
 from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
+from api.interests.serializers import InterestSerializer
 
 from api.projects.models import Project, ProjectApplication
 from api.users.serializers import UserSerializer
@@ -9,6 +10,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     supervisor = UserSerializer()
     applications_count = serializers.SerializerMethodField()
     application_sent = serializers.SerializerMethodField()
+    interests = InterestSerializer(many=True)
 
     class Meta:
         model = Project
@@ -20,6 +22,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "views",
             "applications_count",
             "application_sent",
+            "interests",
         ]
 
     def get_applications_count(self, obj):
