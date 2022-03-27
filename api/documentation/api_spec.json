@@ -881,6 +881,39 @@
         ],
         "description": "Only students."
       }
+    },
+    "/users/": {
+      "get": {
+        "summary": "Get users",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-users",
+        "description": "Only supervisors.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "required": true
+          }
+        ]
+      }
     }
   },
   "components": {

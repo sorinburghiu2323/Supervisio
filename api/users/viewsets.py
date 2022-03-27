@@ -1,3 +1,4 @@
+from rest_framework.exceptions import ValidationError
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
@@ -10,6 +11,16 @@ from api.users.utils import get_token_response
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    def get_serializer_class(self):
+        if self.action == "list":
+            return UserSerializer
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            raise ValidationError({'detail': 'User is not authenticated.'})
+        users = User.objects.filter(is_supervisor=True)
+        return users
+
     @action(detail=False, methods=["POST"], url_path="login")
     def login(self, request):
         """
