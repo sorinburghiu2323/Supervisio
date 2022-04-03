@@ -1,53 +1,69 @@
 <template>
     <div class="container">
-        <div class="title">
-            Recommended projects
-        </div>
-        <div class="projects">
-            <Project v-for="(project, index) in recommendedProjects" :key="index" :project="project"/>
-        </div>
-        <div class="title">
-            Recommended supervisors
-        </div>
-        <div class="projects">
-            <Supervisor 
-                v-for="(supervisor, index) in recommendedSupervisors" 
-                :key="index" 
-                :supervisor="supervisor"
-                @clickSupervisor="clickSupervisorCard(supervisor)"    
-            />
-        </div>
-        <div class="title">
-            Search everything
-        </div>
-        <div class="filters">
-            <font-awesome-icon class="search-icon" icon="fa-solid fa-magnifying-glass" @click="searchProjects()"/>
-            <input class="input" v-model="search" type="text" placeholder="Search by phrase..">
-            <div class="supervisor-filter">
-                <Multiselect 
-                    v-model="searchSupervisor"
-                    track-by="id"
-                    label="first_name"
-                    :options="supervisors"
-                    :searchable="true"
-                />
+        <div v-if="user.is_supervisor">
+            <div class="title">
+                Approved applications ({{ approvedApplications.length }})
             </div>
-            <div class="interest-filter">
-                <Multiselect 
-                    v-model="searchInterests"
-                    track-by="id"
-                    label="name"
-                    :options="interests"
-                    :searchable="true"
-                    :multiple="true"
-                />
+            <div class="projects">
+                <Application v-for="(application, index) in approvedApplications" :key="index" :application="application"/>
+            </div>
+            <div class="title">
+                Pending applications ({{ pendingApplications.length }})
+            </div>
+            <div class="projects">
+                <Application v-for="(application, index) in pendingApplications" :key="index" :application="application"/>
             </div>
         </div>
-        <div class="projects">
-            <Project v-for="(project, index) in projects" :key="index" :project="project"/>
-        </div>
-        <div v-if="projects === []" class="no-projects">
-            Oops, we could not find any projects with this search..
+        <div v-else>
+            <div class="title">
+                Recommended projects
+            </div>
+            <div class="projects">
+                <Project v-for="(project, index) in recommendedProjects" :key="index" :project="project"/>
+            </div>
+            <div class="title">
+                Recommended supervisors
+            </div>
+            <div class="projects">
+                <Supervisor 
+                    v-for="(supervisor, index) in recommendedSupervisors" 
+                    :key="index" 
+                    :supervisor="supervisor"
+                    @clickSupervisor="clickSupervisorCard(supervisor)"    
+                />
+            </div>
+            <div class="title">
+                Search everything
+            </div>
+            <div class="filters">
+                <font-awesome-icon class="search-icon" icon="fa-solid fa-magnifying-glass" @click="searchProjects()"/>
+                <input class="input" v-model="search" type="text" placeholder="Search by phrase..">
+                <div class="supervisor-filter">
+                    <Multiselect 
+                        v-model="searchSupervisor"
+                        track-by="id"
+                        label="first_name"
+                        :options="supervisors"
+                        :searchable="true"
+                    />
+                </div>
+                <div class="interest-filter">
+                    <Multiselect 
+                        v-model="searchInterests"
+                        track-by="id"
+                        label="name"
+                        :options="interests"
+                        :searchable="true"
+                        :multiple="true"
+                    />
+                </div>
+            </div>
+            <div class="projects">
+                <Project v-for="(project, index) in projects" :key="index" :project="project"/>
+            </div>
+            <div v-if="projects === []" class="no-projects">
+                Oops, we could not find any projects with this search..
+            </div>
         </div>
     </div>
 </template>
@@ -55,6 +71,7 @@
 import axios from "axios";
 import Project from "@/components/Project";
 import Supervisor from "@/components/Supervisor";
+import Application from "@/components/Application";
 import Multiselect from 'vue-multiselect';
 
 export default {
@@ -62,10 +79,12 @@ export default {
     components: {
         Project,
         Supervisor,
+        Application,
         Multiselect,
     },
     data() {
         return {
+            user: null,
             projects: [],
             supervisors: [],
             interests: [],
@@ -74,15 +93,50 @@ export default {
             search: "",
             searchSupervisor: null,
             searchInterests: [],
+            approvedApplications: [],
+            pendingApplications: [],
         }
     },
-    mounted() {
-        this.getRecommendations();
-        this.getProjects();
-        this.getSupervisors();
-        this.getInterests();
+    async mounted() {
+        await this.getUser();
+        if (this.user.is_supervisor) {
+            this.getApprovedApplications();
+            this.getPendingApplications();
+        } else {
+            this.getRecommendations();
+            this.getProjects();
+            this.getSupervisors();
+            this.getInterests();
+        }
     },
     methods: {
+        async getUser() {
+            await axios.get("api/users/me/", { headers: { Authorization: this.$authToken } })
+            .then((response) => {
+                this.user = response.data;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        },
+        async getApprovedApplications() {
+            await axios.get("api/projects/applications/?is_approved=true", { headers: { Authorization: this.$authToken } })
+            .then((response) => {
+                this.approvedApplications = response.data;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        },
+        async getPendingApplications() {
+            await axios.get("api/projects/applications/?is_approved=false", { headers: { Authorization: this.$authToken } })
+            .then((response) => {
+                this.pendingApplications = response.data;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        },
         async getProjects() {
             await axios.get("api/projects/", { headers: { Authorization: this.$authToken } })
             .then((response) => {

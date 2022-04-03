@@ -57,7 +57,7 @@ class UserViewSet(viewsets.ModelViewSet):
         detail=False,
         methods=["GET", "PATCH"],
         url_path="me",
-        authentication_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticated],
     )
     def users_me(self, request):
         """
@@ -79,7 +79,7 @@ class UserViewSet(viewsets.ModelViewSet):
         detail=False,
         methods=["GET"],
         url_path="supervisors",
-        authentication_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticated],
     )
     def users_supervisors(self, request):
         supervisors = User.objects.filter(is_supervisor=True)

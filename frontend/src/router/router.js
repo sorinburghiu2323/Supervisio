@@ -3,6 +3,8 @@ import VueRouter from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
 import Login from "../views/Login.vue";
 import ProjectPage from "../views/ProjectPage.vue";
+import ApplicationPage from "../views/ApplicationPage.vue";
+import InterestsPage from "../views/InterestsPage.vue";
 import axios from "axios";
 
 
@@ -23,6 +25,16 @@ const routes = [
     path: "/projects/:id",
     name: "ProjectPage",
     component: ProjectPage,
+  },
+  {
+    path: "/applications/:id",
+    name: "ApplicationPage",
+    component: ApplicationPage,
+  },
+  {
+    path: "/interests",
+    name: "InterestsPage",
+    component: InterestsPage,
   }
 ];
 

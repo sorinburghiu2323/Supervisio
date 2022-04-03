@@ -148,7 +148,7 @@ class ProjectApplicationViewSet(viewsets.ModelViewSet):
         return super().get_permissions()
 
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.action in ["list", "retrieve"]:
             return ProjectApplicationSerializer
 
     def get_queryset(self):

@@ -3,7 +3,7 @@
         <div class="title">
             Supervisio
         </div>
-        <div class="cog-icon">
+        <div class="cog-icon" @click="$router.push({ path: `/interests`})">
             <font-awesome-icon :icon="['fas', 'cog']"/>
         </div>
     </div>
