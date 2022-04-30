@@ -17,7 +17,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
-            raise ValidationError({'detail': 'User is not authenticated.'})
+            raise ValidationError({"detail": "User is not authenticated."})
         users = User.objects.filter(is_supervisor=True)
         return users
 

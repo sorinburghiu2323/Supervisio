@@ -40,15 +40,17 @@ class RecommenderTests(APITestCase):
             in [[project_3, project_2, project_1], [project_3, project_1, project_2]]
         )
 
-    def test_simulation(self):
-        Generator(500)
-        students = User.objects.filter(is_supervisor=False)
-        satisfaction = []
-        for user in students:
-            recommender = LinearRecommender(user)
-            projects = recommender.get_project_recommendations()
-            supervisors = recommender.get_supervisor_recommendations()
-            satisfaction.append(
-                calculate_recommendation_satisfaction(user, projects, supervisors)
-            )
-        plot_values(satisfaction, recommender.name)
+    # Note: This test is excluded out of the test suite as it takes long to run.
+    # Please run this test individually.
+    # def test_simulation(self):
+    #     Generator(500)
+    #     students = User.objects.filter(is_supervisor=False)
+    #     satisfaction = []
+    #     for user in students:
+    #         recommender = LinearRecommender(user)
+    #         projects = recommender.get_project_recommendations()
+    #         supervisors = recommender.get_supervisor_recommendations()
+    #         satisfaction.append(
+    #             calculate_recommendation_satisfaction(user, projects, supervisors)
+    #         )
+    #     plot_values(satisfaction, recommender.name)

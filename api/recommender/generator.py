@@ -66,8 +66,9 @@ class Generator:
 
         # Create projects for supervisors.
         for supervisor in supervisors:
+            b = supervisor.interests.all()
             for _ in range(self.projects_per_supervisor):
-                self.generate_project(supervisor, interests)
+                self.generate_project(supervisor, b, interests)
 
     def generate_user(self, interests, is_supervisor: bool = False) -> User:
         """
@@ -106,17 +107,19 @@ class Generator:
             except ValidationError:
                 continue
 
-    def generate_project(self, supervisor: User, interests: List[Interest]) -> Project:
+    def generate_project(self, supervisor: User, supervisor_interests, interests: List[Interest]) -> Project:
         """
         Generate project for supervisor given interests.
         :param supervisor: User instance.
         :param interests: Interest queryset.
         :return: Project instance.
         """
+        b = supervisor_interests
+        len(b)
         project = ProjectFactory(supervisor=supervisor)
 
         # Give the project a supervisor's interest.
-        project.interests.add(random.choice(supervisor.interests.all()))
+        project.interests.add(random.choice(supervisor_interests))
 
         # Give the project the rest of the random interests.
         for _ in range(self.max_assigned_interests - 1):
