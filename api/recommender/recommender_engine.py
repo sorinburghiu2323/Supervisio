@@ -13,6 +13,8 @@ class BaseRecommender:
     """
     Abstract class to implement project and supervisor recommendations.
     Consits of reusable functions that can be used throughout any approach.
+    Please check the jupyter notebook for the implementation of the content-based
+    and collaborative-filtering methods.
     """
 
     name = "Base recommender"

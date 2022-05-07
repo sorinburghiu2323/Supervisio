@@ -107,7 +107,9 @@ class Generator:
             except ValidationError:
                 continue
 
-    def generate_project(self, supervisor: User, supervisor_interests, interests: List[Interest]) -> Project:
+    def generate_project(
+        self, supervisor: User, supervisor_interests, interests: List[Interest]
+    ) -> Project:
         """
         Generate project for supervisor given interests.
         :param supervisor: User instance.

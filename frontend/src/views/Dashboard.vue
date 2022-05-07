@@ -42,7 +42,8 @@
                     <Multiselect 
                         v-model="searchSupervisor"
                         track-by="id"
-                        label="first_name"
+                        label="last_name"
+                        :custom-label="customLabel"
                         :options="supervisors"
                         :searchable="true"
                     />
@@ -53,8 +54,9 @@
                         track-by="id"
                         label="name"
                         :options="interests"
-                        :searchable="true"
+                        :searchable="false"
                         :multiple="true"
+                        :close-on-select="false"
                     />
                 </div>
             </div>
@@ -201,6 +203,9 @@ export default {
             this.searchInterests = [],
             this.searchProjects();
         },
+        customLabel({first_name, last_name}) {
+            return `${first_name} ${last_name}`
+        },
     }
 };
 </script>
@@ -260,6 +265,6 @@ export default {
     border-style: solid;
     border-color: #707070;
     border-radius: 10px;
-    width: 15vw;
+    width: 22vw;
 }
 </style>

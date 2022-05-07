@@ -11,7 +11,7 @@ from api.projects.serializers import (
     ProjectPostSerializer,
     ProjectSerializer,
 )
-from api.recommender.recommender_engine import LinearRecommender
+from api.recommender.recommender_engine import DistributedRecommender, LinearRecommender
 from api.users.serializers import UserSerializer
 from api.utils import convert_to_bool
 
@@ -123,7 +123,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["GET"], url_path="recommendations")
     def get_recommendations(self, request):
-        recommender_engine = LinearRecommender(request.user)
+        recommender_engine = DistributedRecommender(request.user)
         return Response(
             {
                 "projects": ProjectSerializer(
